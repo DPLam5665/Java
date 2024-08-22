@@ -30,7 +30,7 @@ public class DanhSach_DocGia {
             System.out.println("Moi ban nhap lua chon");
             Scanner sc = new Scanner(System.in);
             flag = sc.nextInt();
-            DocGia a;
+            DocGia a    ;
         }
     }
 
