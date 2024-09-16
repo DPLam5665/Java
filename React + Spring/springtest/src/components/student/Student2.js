@@ -164,6 +164,7 @@ export default function Student2() {
                                                 >
                                                     <i className="fa-solid fa-delete-left"></i>
                                                 </Button>
+                                                HELLO
                                                 <Button className="btn btn-success" onClick={() => handle_edit(item.id, item)}>
                                                     <i class="fa-solid fa-pen-to-square"></i>
                                                 </Button>

@@ -1,7 +1,7 @@
 import { Button, Container, Table, Alert, Input } from "reactstrap";
 import { useDispatch, useSelector } from 'react-redux';
 import { getAll, deleteStudent, resetStatusAndMessage, editStudent } from "../../redux/studentSlice";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import ReactPaginate from 'react-paginate';
 
@@ -199,6 +199,9 @@ export default function Student() {
                                                 </Button>
                                                 <Button className="btn btn-success" onClick={() => handle_edit(item.id, item)}>
                                                     <i class="fa-solid fa-pen-to-square"></i>
+                                                </Button>
+                                                <Button>
+                                                    <Link className="nav-link" to={`/student-detail/${item.id}`}><i className="fa-brands fa-product-hunt"></i></Link>
                                                 </Button>
                                             </>
                                     }

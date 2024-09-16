@@ -1,6 +1,7 @@
 // src/features/auth/authSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
+import StudentDetail from '../pages/studentDetail/StudentDetail';
 // Thay đổi URL và cấu hình phù hợp với API của bạn
 const BASE_URL = 'http://localhost:8080/api/v1/admin';
 
@@ -33,6 +34,20 @@ export const deleteStudent= createAsyncThunk('student/deleteStudent', async (id,
   }
 });
 
+export const uploadImage = createAsyncThunk('student/uploadImage', async ({id, formData}, thunkAPI) => {
+  const url = `${BASE_URL}/student/uploads/${id}`;
+  try {
+  const response = await axios.post(url, formData, {
+  headers: {
+  'Content-Type': 'multipart/form-data'
+  }
+  });
+  return response.data;
+  } catch (error) {
+  return thunkAPI.rejectWithValue(error.response.data);
+  }
+  });
+
 export const editStudent= createAsyncThunk('student/editProduct', async ({id,student},thunkAPI) => {
   const url= BASE_URL+`/student/${id}`;
   try {
@@ -43,12 +58,25 @@ export const editStudent= createAsyncThunk('student/editProduct', async ({id,stu
     return thunkAPI.rejectWithValue(error.response.data); // Trả về lỗi nếu có
   }
 });
+
+export const getAllStudentDetail = createAsyncThunk('student/getAllStudentDetail', async (id, thunkAPI)=>{
+  const url = `${BASE_URL}/student/getAllImage/${id}`;
+  try {
+  const response = await axios.get(url);
+  return response.data; // Trả về dữ liệu từ phản hồi
+  } catch (error) {
+  return thunkAPI.rejectWithValue(error.response.data); // Trà về lỗi nếu có
+  }
+  });
+  
+
 const studentSlice = createSlice({
   name: 'student',
   initialState: {
     status: 'idle',
     error: null,
     students:null,
+    studentDetails: null,
     totalPages:10,
     message:"",
   },
@@ -61,6 +89,16 @@ const studentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      .addCase(getAllStudentDetail.fulfilled, (state, action) => {
+      state.status=action.payload.status
+      state.message=action.payload.message
+      state.studentDetails = action.payload.data;
+      })
+      .addCase(getAllStudentDetail.rejected, (state, action) => {
+      state.status=action.payload.status
+      state.message=action.payload.message
+      state.error=action.payload.data
+      })
       .addCase(getAll.fulfilled, (state, action) => {
         state.students = action.payload.data
         state.totalPages = action.payload.data.totalPages
